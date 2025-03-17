@@ -1,3 +1,6 @@
 netifaces
 scapy==2.6.1
-core
+pandas
+pick
+requests==2.28.0
+termcolor

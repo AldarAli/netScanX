@@ -4,8 +4,10 @@ import os
 import sys
 import time
 import configparser
-from network_discovery.wifi_scanner import WiFiScanner, wifi_scan  # Updated import
-from network_discovery.port_scanner import port_scan
+from core.network_discovery.wifi_scanner import wifi_scan 
+from core.network_discovery.port_scanner import port_scan
+from core.network_discovery.network_discovery import discover_network
+from core.recon import recon_choice, validate_mac_address
 
 config = configparser.ConfigParser()
 config.read('config/configuration.ini')
@@ -18,7 +20,7 @@ def clear_screen():
 def print_banner():
     """Display the netScanX banner."""
     banner = """
-    ███╗   ██╗███████╗████████╗███████╗ ██████╗ █████╗ ███╗   ██╗██╗  ██╗
+    ███╗   ██╗███████╗████████╗███████╗ ██████╗ █████╗ ███╗   ██╗██╗  ██╗ 
     ████╗  ██║██╔════╝╚══██╔══╝██╔════╝██╔════╝██╔══██╗████╗  ██║╚██╗██╔╝
     ██╔██╗ ██║█████╗     ██║   ███████╗██║     ███████║██╔██╗ ██║ ╚███╔╝ 
     ██║╚██╗██║██╔══╝     ██║   ╚════██║██║     ██╔══██║██║╚██╗██║ ██╔██╗ 
@@ -66,6 +68,16 @@ def network_discovery_menu():
     choice = input("\033[1;34mEnter your choice (1-4): \033[0m")
     return choice
 
+def reconnaissance_menu():
+    """Display the reconnaissance options."""
+    print("\033[1;37mReconnaissance Options:\033[0m")
+    print("1. Scan Network and Select MAC Address")
+    print("2. Enter MAC Address Manually")
+    print("3. Back to Main Menu")
+    
+    choice = input("\033[1;34mEnter your choice (1-3): \033[0m")
+    return choice
+
 def handle_network_discovery_choice(choice):
     """Handle the user's choice in the network discovery menu."""
     if choice == '1':
@@ -73,12 +85,36 @@ def handle_network_discovery_choice(choice):
     elif choice == '2':
         port_scan()
     elif choice == '3':
-        wifi_scan()  # This will now work correctly
+        wifi_scan()  
     elif choice == '4':
         return
     else:
         print("\033[1;31mInvalid choice. Please try again.\033[0m")
         time.sleep(1)
+
+def handle_reconnaissance_choice(choice):
+    """Handle the user's choice in the reconnaissance menu."""
+    if choice == '1':
+        # Scan network and select MAC address - now uses auto-detection
+        print("\033[1;34mDetecting local network...\033[0m")
+        recon_choice('1')  # No need to pass target, it will auto-detect
+    elif choice == '2':
+        # Enter MAC address manually
+        while True:
+            manual_input = input("\033[1;34mEnter MAC address (e.g. 00:11:22:33:44:55): \033[0m")
+            if validate_mac_address(manual_input):
+                recon_choice('2', '', manual_input)
+                break
+            else:
+                print("\033[1;31mInvalid MAC address format. Please use format like 00:11:22:33:44:55\033[0m")
+    elif choice == '3':
+        return
+    else:
+        print("\033[1;31mInvalid choice. Please try again.\033[0m")
+        time.sleep(1)
+    
+    # Wait for user to press Enter before returning to menu
+    input("\n\033[1;33mPress Enter to continue...\033[0m")
 
 def main():
     while True:
@@ -96,6 +132,14 @@ def main():
                     break
                 handle_network_discovery_choice(network_choice)
         
+        elif choice == '2':
+            while True:
+                clear_screen()
+                print_banner()
+                recon_choice = reconnaissance_menu()
+                if recon_choice == '3':
+                    break
+                handle_reconnaissance_choice(recon_choice)
         
         elif choice == '4':
             print("\033[1;31mExiting netScanX...\033[0m")

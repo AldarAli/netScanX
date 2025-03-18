@@ -3,12 +3,28 @@
 import nmap
 import os
 import sys
-import time
-import configparser
 
+
+COLOR_CODES = {
+    "red": "\033[1;31m",
+    "green": "\033[1;32m",
+    "yellow": "\033[1;33m",
+    "blue": "\033[1;34m",
+    "purple": "\033[1;35m",
+    "cyan": "\033[1;36m",
+    "white": "\033[1;37m",
+    "reset": "\033[0m"
+}
 class PortScanner:
     def __init__(self):
         self.scanner = nmap.PortScanner()
+        self.color = "green"  # Default color
+
+    def print_colored(self, text, color=None):
+        """Print text with specified color"""
+        if color is None:
+            color = self.color
+        print(f"{COLOR_CODES.get(color, COLOR_CODES['green'])}{text}{COLOR_CODES['reset']}")
         
     def scan(self, target, ports="1-1000", scan_type="-sS"):
         """
@@ -34,17 +50,17 @@ class PortScanner:
                     print(f"\nProtocol: {proto}")
                     
                     ports = sorted(self.scanner[host][proto].keys())
-                    print("{:<10} {:<10} {:<15} {:<30}".format("Port", "State", "Service", "Version"))
-                    print("-" * 60)
+                    self.print_colored("{:<10} {:<10} {:<15} {:<30}".format("Port", "State", "Service", "Version"), "cyan")
+                    self.print_colored("-" * 60, "yellow")
                     
                     for port in ports:
                         service = self.scanner[host][proto][port]
-                        print("{:<10} {:<10} {:<15} {:<30}".format(
+                        self.print_colored("{:<10} {:<10} {:<15} {:<30}".format(
                             port, 
                             service['state'], 
                             service['name'], 
                             service.get('product', '') + ' ' + service.get('version', '')
-                        ))
+                        ), "cyan")
             
             return self.scanner
         except nmap.PortScannerError as e:
@@ -64,10 +80,10 @@ def port_scan():
             return
             
         # Let user choose scan type
-        print("\nSelect scan type:")
-        print("1. SYN Scan (stealthy, default)")
-        print("2. Connect Scan (more reliable but noisy)")
-        print("3. UDP Scan (for UDP services)")
+        print(f"{COLOR_CODES['blue']}\nSelect scan type:{COLOR_CODES['reset']}")
+        print(f"{COLOR_CODES['green']}1. SYN Scan (stealthy, default){COLOR_CODES['reset']}")
+        print(f"{COLOR_CODES['yellow']}2. Connect Scan (more reliable but noisy){COLOR_CODES['reset']}")
+        print(f"{COLOR_CODES['cyan']}3. UDP Scan (for UDP services){COLOR_CODES['reset']}")
         
         scan_choice = input("\033[1;34mEnter choice [1]: \033[0m") or "1"
         

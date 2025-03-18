@@ -4,3 +4,5 @@ pandas
 pick
 requests
 termcolor
+python-nmap
+python-dotenv

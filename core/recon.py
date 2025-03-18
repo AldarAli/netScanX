@@ -7,7 +7,6 @@ load_dotenv()
 import requests 
 import json
 import re
-import socket
 import subprocess
 import scapy.all as scapy
 from pick import pick

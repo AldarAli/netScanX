@@ -8,6 +8,7 @@ from core.network_discovery.wifi_scanner import wifi_scan
 from core.network_discovery.port_scanner import port_scan
 from core.network_discovery.network_discovery import discover_network
 from core.recon import recon_choice, validate_mac_address
+from core.detection import detect_choice
 
 config = configparser.ConfigParser()
 config.read('config/configuration.ini')
@@ -78,6 +79,16 @@ def reconnaissance_menu():
     choice = input("\033[1;34mEnter your choice (1-3): \033[0m")
     return choice
 
+def detection_menu():
+    """Display the detection options."""
+    print("\033[1;37mDetection Options:\033[0m")
+    print("1. Detect ARP Spoofing")
+    print("2. Detect TCP SYN Flood")
+    print("3. Back to Main Menu")
+    
+    choice = input("\033[1;34mEnter your choice (1-3): \033[0m")
+    return choice
+
 def handle_network_discovery_choice(choice):
     """Handle the user's choice in the network discovery menu."""
     if choice == '1':
@@ -116,6 +127,35 @@ def handle_reconnaissance_choice(choice):
     # Wait for user to press Enter before returning to menu
     input("\n\033[1;33mPress Enter to continue...\033[0m")
 
+def handle_detection_choice(choice):
+    """Handle the user's choice in the detection menu."""
+    if choice == '1' or choice == '2':
+        # Common settings for both detection types
+        print("\033[1;34mStarting Detection...\033[0m")
+        
+        # Optional: Let user override the auto-detected network
+        target = input("\033[1;34mEnter network range to monitor (or leave blank for auto-detection): \033[0m")
+        
+        # Ask for verbose mode
+        verbose_input = input("\033[1;34mEnable verbose mode? (y/n, default: n): \033[0m").lower()
+        verbose = verbose_input.startswith('y')
+        
+        if choice == '1':
+            # ARP Spoofing detection
+            detect_choice('1', target if target else None, intf=interface, verbose=verbose)
+        else:
+            # TCP SYN Flood detection
+            port_input = input("\033[1;34mEnter TCP port to monitor (default: 80): \033[0m")
+            port = int(port_input) if port_input.strip() and port_input.isdigit() else 80
+            
+            detect_choice('2', target if target else None, tcp_port=port, intf=interface, verbose=verbose)
+        
+    elif choice == '3':
+        return
+    else:
+        print("\033[1;31mInvalid choice. Please try again.\033[0m")
+        time.sleep(1)
+
 def main():
     while True:
         clear_screen()
@@ -140,6 +180,15 @@ def main():
                 if recon_choice == '3':
                     break
                 handle_reconnaissance_choice(recon_choice)
+                
+        elif choice == '3':
+            while True:
+                clear_screen()
+                print_banner()
+                detection_choice = detection_menu()
+                if detection_choice == '3':
+                    break
+                handle_detection_choice(detection_choice)
         
         elif choice == '4':
             print("\033[1;31mExiting netScanX...\033[0m")

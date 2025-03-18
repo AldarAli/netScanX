@@ -1,6 +1,6 @@
 netifaces
-scapy==2.6.1
+scapy
 pandas
 pick
-requests==2.28.0
+requests
 termcolor

@@ -1,10 +1,11 @@
 # netScanX
+![alt text](image-1.png)
 
 A comprehensive network scanning and security analysis tool for Linux environments.
 
 ## Overview
 
-netScanX is a command-line utility that provides network discovery, reconnaissance, and attack detection capabilities. It helps security professionals and network administrators to analyze their networks, identify connected devices, scan for vulnerabilities, and detect common network attacks.
+netScanX is a command-line utility that provides network discovery, reconnaissance, and attack detection capabilities.
 
 ## Features
 
@@ -41,6 +42,7 @@ netScanX is a command-line utility that provides network discovery, reconnaissan
    ```
 
 4. Configure your environment:
+   - Create .env file and add your API key for MAC address lookups MAC_ADDRESS_API_KEY='your_api_key' https://macaddress.io/
    - Make sure your API key is set in the .env file for MAC address lookups
    - Adjust settings in configuration.ini as needed (especially the WiFi interface)
 
@@ -71,23 +73,6 @@ The application offers a text-based menu with the following options:
    - Detect ARP Spoofing
    - Detect TCP SYN Flood
 
-## Requirements
-
-- Python 3.6+
-- Root/sudo access (for network scanning)
-- Linux operating system
-- Network interface supporting monitor mode (for Wi-Fi scanning)
-
-### Dependencies
-
-- netifaces
-- scapy
-- pandas
-- pick
-- requests
-- termcolor
-- python-nmap
-- python-dotenv
 
 ## Security Notes
 

@@ -14,8 +14,7 @@ from pick import pick
 
 def get_local_network_info():
     """
-    Automatically detect local network IP and subnet mask.
-    
+    detect local network IP and subnet mask.
     Returns:
         str: Network range in CIDR notation (e.g., '192.168.1.0/24')
     """
@@ -49,8 +48,7 @@ def get_local_network_info():
 def recon_choice(choice, target=None, manual_input=None):
     """
     Route to appropriate reconnaissance function based on user choice.
-    
-    Args:
+    Arguments:
         choice (str): User selection ('1' for scan, '2' for manual input)
         target (str): Network target for scanning (optional, auto-detected if None)
         manual_input (str): Manual MAC address input
@@ -71,8 +69,7 @@ def recon_choice(choice, target=None, manual_input=None):
 def choose_mac_address(target):
     """
     Scan network and let user choose a MAC address from discovered devices.
-    
-    Args:
+    Arguments:
         target (str): IP address range to scan (e.g., '192.168.1.0/24')
     """
     scan_addresses(target)
@@ -82,8 +79,7 @@ def choose_mac_address(target):
 def input_mac_address(manual_input):
     """
     Process a manually entered MAC address.
-    
-    Args:
+    Argumets:
         manual_input (str): MAC address entered by user
     """
     # Add validation for MAC address format
@@ -98,10 +94,8 @@ def input_mac_address(manual_input):
 def validate_mac_address(mac):
     """
     Validate MAC address format.
-    
     Args:
         mac (str): MAC address to validate
-        
     Returns:
         bool: True if valid, False otherwise
     """
@@ -176,10 +170,8 @@ def transcribe_api_results(json_object, ip_address):
 def snake_case_to_normal(snake_text):
     """
     Convert snake_case to readable text format.
-    
     Args:
-        snake_text (str): Text in snake_case format
-        
+        snake_text (str): Text in snake_case format 
     Returns:
         str: Formatted text
     """
@@ -230,8 +222,7 @@ def create_packet(ip):
 
 def transmit_packet(packet):
     """
-    Send packet to network and collect responses.
-    
+    Send packet to network and collect responses. 
     Args:
         packet (scapy.Packet): Packet to transmit
         
@@ -245,10 +236,8 @@ def transmit_packet(packet):
 def parse_response(success_list):
     """
     Parse scapy response into structured data.
-    
     Args:
-        success_list (list): Successful responses from scapy
-        
+        success_list (list): Successful responses from scapy 
     Returns:
         list: List of dictionaries with IP and MAC addresses
     """
@@ -262,7 +251,6 @@ def parse_response(success_list):
 def display_picker(element_entries):
     """
     Display interactive picker for selecting a MAC address.
-    
     Args:
         element_entries (list): List of dictionaries with device information
     """

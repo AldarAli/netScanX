@@ -1,4 +1,3 @@
-# File: /netScanX/netScanX/core/cli.py
 
 import os
 import sys

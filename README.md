@@ -1,7 +1,7 @@
 # netScanX
 ![alt text](image-1.png)
 
-A comprehensive network scanning and security analysis tool for Linux environments.
+A network scanning and security analysis tool for Linux environments.
 
 ## Overview
 
